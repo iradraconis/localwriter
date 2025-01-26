@@ -89,6 +89,15 @@ class MainJob(unohelper.Base, XJobExecutor):
             # Handle potential IO errors (optional)
             print(f"Error writing to {config_file_path}: {e}")
 
+    def get_installed_models(self):
+        """Ruft die Liste der installierten Ollama-Modelle ab."""
+        try:
+            result = os.popen("ollama list").read().strip()
+            models = result.splitlines()
+            return models
+        except Exception as e:
+            print(f"Fehler beim Abrufen der Modelle: {e}")
+            return []
 
     #retrieved from https://wiki.documentfoundation.org/Macros/General/IO_to_Screen
     #License: Creative Commons Attribution-ShareAlike 3.0 Unported License,
@@ -165,6 +174,7 @@ class MainJob(unohelper.Base, XJobExecutor):
             @param y optional dialog position in twips
             @return string if OK button pushed, otherwise zero length string
         """
+        
         WIDTH = 600
         HORI_MARGIN = VERT_MARGIN = 8
         BUTTON_WIDTH = 100
@@ -173,7 +183,7 @@ class MainJob(unohelper.Base, XJobExecutor):
         VERT_SEP = 4
         LABEL_HEIGHT = BUTTON_HEIGHT  + 5
         EDIT_HEIGHT = 24
-        HEIGHT = VERT_MARGIN * 6 + LABEL_HEIGHT * 6 + VERT_SEP * 8 + EDIT_HEIGHT * 6
+        HEIGHT = (VERT_MARGIN * 6 + LABEL_HEIGHT * 6 + VERT_SEP * 8 + EDIT_HEIGHT * 6) + 35
         import uno
         from com.sun.star.awt.PosSize import POS, SIZE, POSSIZE
         from com.sun.star.awt.PushButtonType import OK, CANCEL
